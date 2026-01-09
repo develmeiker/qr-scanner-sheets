@@ -6,6 +6,7 @@ let codeReader;
 let scannedItems = [];
 let isScanning = false;
 let scannedText = '';
+let gapiReady = false;
 
 const preview = document.getElementById('preview');
 const addButton = document.getElementById('addToList');
@@ -19,6 +20,9 @@ async function initializeGapiClient() {
         apiKey: 'AIzaSyAKU5XQB2wDOjx6zzToWbbXvEJpXEWi7DY',
         discoveryDocs: [DISCOVERY_DOC],
     });
+
+    gapiReady = true;
+    console.log('GAPI lista')
 }
 
 function gisLoaded() {
@@ -83,12 +87,19 @@ addButton.addEventListener('click', () => {
 });
 
 document.getElementById('sendToSheets').addEventListener('click', () => {
-    if (gapi.client.getToken() === null) {
+
+    if (!gapiReady || !tokenClient) {
+        alert('Google aún se está inicializando, espera unos segundos');
+        return;
+    }
+
+    if (!gapi.client.getToken()) {
         tokenClient.requestAccessToken();
     } else {
         appendToSheet();
     }
 });
+
 
 function updateList() {
     let list = document.getElementById('scannedList');
@@ -137,4 +148,5 @@ async function appendToSheet() {
         alert('Error al enviar datos');
     }
 }
+
 
