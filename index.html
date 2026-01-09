@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QR Scanner to Sheets</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <h1>Escáner de QR para Google Sheets</h1>
+    <button id="startScan">Iniciar Escaneo</button>
+    <video id="video" width="300" height="200"></video>
+    <div id="preview" style="display:none;">
+        <p>Escaneado: <span id="scannedText"></span></p>
+        <button id="addToList">Agregar a Lista</button>
+    </div>
+    <h2>Lista de Escaneados</h2>
+    <div id="listContainer">
+        <ul id="scannedList"></ul>
+    </div>
+    <button id="sendToSheets" style="display:none;">Enviar a Sheets</button>
+    <script src="https://unpkg.com/@zxing/library@latest/umd/index.min.js"></script>
+    <script async defer src="https://apis.google.com/js/api.js" onload="gapiLoaded"></script>
+    <script async defer src="https://accounts.google.com/gsi/client" onload="gisLoaded"></script>
+    <script src="script.js"></script>
+</body>
+</html>
