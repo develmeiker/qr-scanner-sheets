@@ -33,7 +33,7 @@ function gisLoaded() {
         client_id: '257011449518-cofhtqq2bi6ovi2kslv6nes0h1ukitc9.apps.googleusercontent.com',
         scope: 'https://www.googleapis.com/auth/spreadsheets',
         callback: (response) => {
-            gapi.client.setToken(response.access_token);
+            gapi.client.setToken({ access_token: response.access_token });
             appendToSheet();
         },
     });
@@ -147,6 +147,7 @@ async function appendToSheet() {
         alert('Error al enviar datos');
     }
 }
+
 
 
 
