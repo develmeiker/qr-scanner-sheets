@@ -12,10 +12,12 @@ const preview = document.getElementById('preview');
 const addButton = document.getElementById('addToList');
 
 function gapiLoaded() {
+    console.log('gapiLoaded OK');
     gapi.load('client', initializeGapiClient);
 }
 
 async function initializeGapiClient() {
+    console.log('initializeGapiClient OK');
     await gapi.client.init({
         apiKey: 'AIzaSyAKU5XQB2wDOjx6zzToWbbXvEJpXEWi7DY',
         discoveryDocs: [DISCOVERY_DOC],
@@ -26,18 +28,15 @@ async function initializeGapiClient() {
 }
 
 function gisLoaded() {
+    console.log('gisLoaded OK');
     tokenClient = google.accounts.oauth2.initTokenClient({
         client_id: '257011449518-cofhtqq2bi6ovi2kslv6nes0h1ukitc9.apps.googleusercontent.com',
         scope: 'https://www.googleapis.com/auth/spreadsheets',
         callback: (response) => {
-            if (response.error !== undefined) {
-                throw (response);
-            }
             gapi.client.setToken(response.access_token);
             appendToSheet();
         },
     });
-    gisInited = true;
 }
 
 document.getElementById('startScan').addEventListener('click', () => {
@@ -148,5 +147,6 @@ async function appendToSheet() {
         alert('Error al enviar datos');
     }
 }
+
 
 
