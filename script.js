@@ -16,14 +16,14 @@ function gapiLoaded() {
 
 async function initializeGapiClient() {
     await gapi.client.init({
-        apiKey: 'YOUR_API_KEY',
+        apiKey: 'AIzaSyAKU5XQB2wDOjx6zzToWbbXvEJpXEWi7DY',
         discoveryDocs: [DISCOVERY_DOC],
     });
 }
 
 function gisLoaded() {
     tokenClient = google.accounts.oauth2.initTokenClient({
-        client_id: 'YOUR_CLIENT_ID',
+        client_id: '257011449518-cofhtqq2bi6ovi2kslv6nes0h1ukitc9.apps.googleusercontent.com',
         scope: 'https://www.googleapis.com/auth/spreadsheets',
         callback: (response) => {
             if (response.error !== undefined) {
@@ -119,7 +119,7 @@ async function appendToSheet() {
 
     try {
         await gapi.client.sheets.spreadsheets.values.append({
-            spreadsheetId: 'YOUR_SPREADSHEET_ID',
+            spreadsheetId: '1UauebiLulDowhA-9LxmWGKHuk6K2XlLk_J5dBDurOGo',
             range: 'Sheet1!A:A',
             valueInputOption: 'RAW',
             resource: {
@@ -137,3 +137,4 @@ async function appendToSheet() {
         alert('Error al enviar datos');
     }
 }
+
