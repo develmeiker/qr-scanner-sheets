@@ -35,6 +35,16 @@ function gisLoaded() {
         callback: (response) => {
             gapi.client.setToken({ access_token: response.access_token });
             appendToSheet();
+            async function qrExistsInSheet(qr) {
+    const response = await gapi.client.sheets.spreadsheets.values.get({
+        spreadsheetId: '1UauebiLulDowhA-9LxmWGKHuk6K2XlLk_J5dBDurOGo',
+        range: 'Sheet1!A:A',
+    });
+
+    const values = response.result.values || [];
+    return values.some(row => row[0] === qr);
+}
+
         },
     });
 }
@@ -42,21 +52,25 @@ function gisLoaded() {
 document.getElementById('startScan').addEventListener('click', () => {
     if (!isScanning) {
         codeReader = new ZXing.BrowserQRCodeReader();
-        codeReader.decodeFromVideoDevice(null, 'video', (result, err) => {
+        codeReader.decodeFromVideoDevice(null, 'video', async (result, err) => {
             if (result) {
                 scannedText = result.text;
                 document.getElementById('scannedText').textContent = scannedText;
 
                 // VALIDACIÓN DE DUPLICADOS
-                if (scannedItems.includes(scannedText)) {
-                    preview.classList.add('duplicate');
-                    addButton.disabled = true;
-                    addButton.textContent = 'Duplicado';
-                } else {
-                    preview.classList.remove('duplicate');
-                    addButton.disabled = false;
-                    addButton.textContent = 'Agregar a Lista';
-                }
+                const isDuplicate = await qrExistsInSheet(scannedText);
+
+            if (isDuplicate) {
+                preview.classList.add('duplicate');
+                preview.classList.remove('success');
+                addButton.disabled = true;
+                addButton.textContent = 'QR duplicado';
+            } else {
+                preview.classList.remove('duplicate');
+                preview.classList.add('success');
+                addButton.disabled = false;
+                addButton.textContent = 'Guardar QR';
+            }
 
                 preview.style.display = 'block';
             }
@@ -71,19 +85,14 @@ document.getElementById('startScan').addEventListener('click', () => {
     }
 });
 
-addButton.addEventListener('click', () => {
+addButton.addEventListener('click', async () => {
     if (!scannedText) return;
 
-    scannedItems.push(scannedText);
-    updateList();
-
+    await appendToSheet();
     preview.style.display = 'none';
     scannedText = '';
-
-    if (scannedItems.length > 0) {
-        document.getElementById('sendToSheets').style.display = 'block';
-    }
 });
+
 
 document.getElementById('sendToSheets').addEventListener('click', () => {
 
@@ -125,28 +134,20 @@ function updateList() {
 }
 
 async function appendToSheet() {
-    if (scannedItems.length === 0) return;
+    const now = new Date().toLocaleString();
 
-    try {
-        await gapi.client.sheets.spreadsheets.values.append({
-            spreadsheetId: '1UauebiLulDowhA-9LxmWGKHuk6K2XlLk_J5dBDurOGo',
-            range: 'Sheet1!A:A',
-            valueInputOption: 'RAW',
-            resource: {
-                values: scannedItems.map(item => [item]),
-            },
-        });
+    await gapi.client.sheets.spreadsheets.values.append({
+        spreadsheetId: '1UauebiLulDowhA-9LxmWGKHuk6K2XlLk_J5dBDurOGo',
+        range: 'Sheet1!A:C',
+        valueInputOption: 'RAW',
+        resource: {
+            values: [[scannedText, now, '']],
+        },
+    });
 
-        alert('Datos enviados a Sheets exitosamente');
-        scannedItems = [];
-        updateList();
-        document.getElementById('sendToSheets').style.display = 'none';
-
-    } catch (err) {
-        console.error('Error al enviar a Sheets:', err);
-        alert('Error al enviar datos');
-    }
+    alert('QR guardado correctamente');
 }
+
 
 
 
