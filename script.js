@@ -65,7 +65,7 @@ async function appendToSheet() {
         },
     });
 
-    alert('QR guardado correctamente');
+    //alert('QR guardado correctamente');
 }
 
 /* =========================
@@ -128,3 +128,4 @@ addButton.addEventListener('click', async () => {
     preview.style.display = 'none';
     scannedText = '';
 });
+
