@@ -1,7 +1,6 @@
 const DISCOVERY_DOC = 'https://sheets.googleapis.com/$discovery/rest?version=v4';
 const SPREADSHEET_ID = '1UauebiLulDowhA-9LxmWGKHuk6K2XlLk_J5dBDurOGo';
 
-const USER = 'A';
 
 let tokenClient;
 let gapiReady = false;
@@ -51,7 +50,6 @@ async function createQR() {
     let lastFolio = Number(res.result.values?.[0]?.[0] || 0);
     let newFolio = lastFolio + 1;
     let folioFormatted = newFolio.toString().padStart(6, '0');
-    let now = new Date().toLocaleString();
 
     // 2 Guardar nuevo folio
     await gapi.client.sheets.spreadsheets.values.update({
@@ -63,22 +61,13 @@ async function createQR() {
         },
     });
 
-    // 3 Guardar historial
-    await gapi.client.sheets.spreadsheets.values.append({
-        spreadsheetId: SPREADSHEET_ID,
-        range: 'Sheet1!A:C',
-        valueInputOption: 'RAW',
-        resource: {
-            values: [[folioFormatted, now, USER]],
-        },
-    });
-
-    // 4 Generar QR
+    // 3 Mostrar folio
     document.getElementById('folio').textContent = 'Folio: ' + folioFormatted;
-
+    // 4 Generar QR visual (NO guarda en Sheet1)
     QRCode.toCanvas(document.getElementById('qr'), folioFormatted, {
         width: 220
     });
 }
+
 
 
