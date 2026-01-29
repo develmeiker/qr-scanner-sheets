@@ -18,7 +18,7 @@ function gapiLoaded() {
 
 function gisLoaded() {
     tokenClient = google.accounts.oauth2.initTokenClient({
-        client_id: 'TU_CLIENT_ID_AQUI',
+        client_id: '257011449518-cofhtqq2bi6ovi2kslv6nes0h1ukitc9.apps.googleusercontent.com',
         scope: 'https://www.googleapis.com/auth/spreadsheets',
         callback: async (resp) => {
             gapi.client.setToken({ access_token: resp.access_token });
@@ -80,3 +80,4 @@ async function createQR() {
         width: 220
     });
 }
+
