@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Generador de QR</title>
+
+<script src="https://accounts.google.com/gsi/client" async defer onload="gisLoaded()"></script>
+<script src="https://apis.google.com/js/api.js" async defer onload="gapiLoaded()"></script>
+<script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
+
+<style>
+body {
+    font-family: Arial;
+    text-align: center;
+}
+#qr {
+    margin-top: 20px;
+}
+</style>
+</head>
+
+<body>
+
+<h2>Generador de QR</h2>
+
+<button onclick="generateQR()">Generar QR</button>
+
+<div id="folio"></div>
+<canvas id="qr"></canvas>
+
+<script src="generator.js"></script>
+
+</body>
+</html>
